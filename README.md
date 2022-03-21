@@ -13,6 +13,6 @@ JDErobotAssignment --------->>
 
                           |---  Conwaygameoflife.py  (terminal based program)
                           |
-                          |---  Conwaytest.py       (uses Conwaygameoflife.py script as module and runs)
+                          |---  Conwaytest.py       (uses Conwaygameoflife.py script as module)
                           
 Methods and way of using mentioned in the respective files :))
