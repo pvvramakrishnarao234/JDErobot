@@ -14,6 +14,12 @@ def randomGrid(N):
     """returns a grid of NxN random values"""
     return np.random.choice(vals, N * N, p=[0.2, 0.8]).reshape(N, N)
 
+def addToad(grid):
+    toad = np.array([[0 ,0, 0,  0],
+                     [0 ,255,255,255],
+                     [255, 255, 255, 0],
+                     [0,  0,  0,  0]])
+    grid[len(grid)//2-2:len(grid)//2+2,len(grid[0])//2-2:len(grid[0])//2+2]=toad
 
 def addGlider(i, j, grid):
     """adds a glider with top left cell at (i, j)"""
@@ -67,14 +73,11 @@ def update(frameNum, img, grid, N):
 
             total=0
 
-            for dir in directions:
-                x=i+dir[0]
-                y=j+dir[1]
-                if(x>=0 and x<N and y>=0 and y<N):
-
-                      total+=grid[x][y]
-
-            total/=255
+            total = int((grid[i, (j - 1) % N] + grid[i, (j + 1) % N] +
+                         grid[(i - 1) % N, j] + grid[(i + 1) % N, j] +
+                         grid[(i - 1) % N, (j - 1) % N] + grid[(i - 1) % N, (j + 1) % N] +
+                         grid[(i + 1) % N, (j - 1) % N] + grid[(i + 1) % N, (j + 1) % N]) / 255)
+            # apply Conway's rules
             # apply Conway's rules
             if grid[i, j] == ON:
                 if (total < 2) or (total > 3):
@@ -102,6 +105,8 @@ def main():
     parser.add_argument('--interval', dest='interval', required=False)
     parser.add_argument('--glider', action='store_true', required=False)
     parser.add_argument('--gosper', action='store_true', required=False)
+    parser.add_argument('--toad', action='store_true', required=False)
+
     args = parser.parse_args()
 
     # set grid size
@@ -121,10 +126,15 @@ def main():
     if args.glider:
         grid = np.zeros(N * N).reshape(N, N)
         addGlider(1, 1, grid)
+        
     elif args.gosper:
         grid = np.zeros(N * N).reshape(N, N)
         addGosperGliderGun(10, 10, grid)
-
+        
+    elif args.toad:
+        grid=np.zeros(N * N).reshape(N, N)
+        addToad(grid)
+        
     else:  # populate grid with random on/off -
         # more off than on
         grid = randomGrid(N)
@@ -144,7 +154,7 @@ def main():
 
     plt.show()
 
-def game(grid_size=50,interval=500,glider=False,gosper=False):
+def game(grid_size=50,interval=500,glider=False,gosper=False,toad=False):
     N = grid_size
     # set animation update interval
     updateInterval = interval
@@ -155,9 +165,14 @@ def game(grid_size=50,interval=500,glider=False,gosper=False):
     if glider:
         grid = np.zeros(N * N).reshape(N, N)
         addGlider(1, 1, grid)
+       
     elif gosper:
         grid = np.zeros(N * N).reshape(N, N)
         addGosperGliderGun(10, 10, grid)
+        
+     elif toad:
+        grid=np.zeros(N * N).reshape(N, N)
+        addToad(grid)
 
     else:  # populate grid with random on/off -
         # more off than on
