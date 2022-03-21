@@ -1,4 +1,8 @@
 # Python code to implement Conway's Game Of Life
+
+# to implement the code in terminal ::       python 'Conwaysgameoflife.py' --grid-size 32 --interval 500 --glider  --gosper --toad
+                                                      #      args[0]            ----------------------------------------  ---> parameterized
+    
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
